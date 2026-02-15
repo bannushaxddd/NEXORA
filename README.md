@@ -38,18 +38,21 @@ https://nexora.onrender.com/search?q=machine%20learning&top_k=5
 
 ---
 
-## Architecture
+## Project Structure
 
-┌─────────────┐      ┌──────────────┐      ┌─────────────┐
-│   FastAPI   │─────▶│  BM25 Engine │─────▶│  Documents  │
-│  REST API   │      │   Indexing   │      │    Corpus   │
-└─────────────┘      └──────────────┘      └─────────────┘
-       │                     │
-       ▼                     ▼
-┌─────────────┐      ┌──────────────┐
-│    Redis    │      │  Tokenizer   │
-│    Cache    │      │  NLP Layer   │
-└─────────────┘      └──────────────┘
+```
+NEXORA/
+├── src/
+│   ├── api/
+│   ├── search/
+│   ├── indexing/
+│   └── config.py
+├── documents.json
+├── docker-compose.yml
+├── requirements.txt
+└── README.md
+```
+
 
 ---
 
