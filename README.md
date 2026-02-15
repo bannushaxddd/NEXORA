@@ -8,7 +8,7 @@
 
 ## 🌐 Live Demo
 
-**🚀 Try it now:** (https://nexora-1kjq.onrender.com/docs)
+**🚀 Try it now:** (https://nexora-1kjq.onrender.com/)
 
 **🔍 Example Searches:**
 - [Search: Python](https://nexora-1kjq.onrender.com/search?q=python&top_k=3)
