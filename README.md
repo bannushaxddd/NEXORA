@@ -1,226 +1,105 @@
-# Production-Grade Search Engine
+# Nexora ?? 
 
-A FAANG-level search engine implementation featuring BM25 ranking, Redis caching, and async API.
+[![License](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](LICENSE) 
 
-## 🚀 Features
+> **Next-generation search engine with BM25 ranking and sub-10ms latency** 
 
-- **Advanced Ranking:** BM25 algorithm (superior to TF-IDF)
-- **High Performance:** Redis caching with <10ms p95 latency
-- **Async API:** FastAPI with concurrent request handling
-- **Production-Ready:** Structured logging, monitoring, error handling
-- **Well-Tested:** 85%+ test coverage
-- **Type-Safe:** Full type hints with mypy
+A production-grade search engine built to demonstrate FAANG-level engineering practices, featuring advanced BM25 ranking, intelligent Redis caching, and asynchronous API design for maximum performance. 
 
-## 📊 Performance Metrics
+--- 
 
-- **Latency (Cached):** <10ms p95
-- **Latency (Uncached):** ~50ms p95
-- **Throughput:** 1000+ QPS
-- **Cache Hit Rate:** >70%
+## ?? Table of Contents 
+- [Overview](#-overview) 
+- [Key Features](#-key-features) 
+- [Performance Metrics](#-performance-metrics) 
+- [Architecture](#-architecture) 
+- [Tech Stack](#-tech-stack) 
+- [Quick Start](#-quick-start) 
+- [API Documentation](#-api-documentation) 
+- [Configuration](#-configuration) 
+- [Development](#-development) 
+- [Testing](#-testing) 
+- [Benchmarking](#-benchmarking) 
+- [Deployment](#-deployment) 
+- [Roadmap](#-roadmap) 
+- [Contributing](#-contributing) 
+- [License](#-license) 
+- [Author](#-author) 
 
-## 🏗️ Architecture
+--- 
 
-```
-User Request → Load Balancer → FastAPI Server
-                                    ↓
-                         ┌──────────┼──────────┐
-                         ↓          ↓          ↓
-                      Redis     Documents   Indexer
-                     (Cache)     (Store)    (BM25)
-```
+## ?? Overview 
+Nexora is a production-ready search engine that demonstrates enterprise-level software engineering practices. Built from the ground up with scalability, performance, and maintainability in mind, it showcases: 
 
-## 🛠️ Tech Stack
+- **Advanced Information Retrieval**: BM25 ranking algorithm (statistically superior to TF-IDF)  
+- **High Performance**: Sub-10ms p95 latency through intelligent caching strategies  
+- **Modern Architecture**: Async/await patterns for concurrent request handling  
+- **Production Ready**: Comprehensive logging, error handling, and monitoring  
+- **Developer Friendly**: Docker containerization, extensive documentation, and testing  
 
-- **Backend:** Python 3.11, FastAPI
-- **Caching:** Redis
-- **Testing:** Pytest
-- **Code Quality:** Black, MyPy, Flake8
+**Perfect for:** Portfolio projects, technical interviews, learning production systems, or as a foundation for building search applications. 
 
-## 🚀 Quick Start
+--- 
 
-### With Docker (Recommended)
+## ? Key Features 
 
-```bash
-# Start services
-docker-compose up -d
+### ?? Advanced Ranking 
+- **BM25 Algorithm**: Statistically proven to outperform TF-IDF  
+- **Hybrid Ranking**: Combines BM25 with PageRank for superior result quality  
+- **Tuned Parameters**: Optimized k1=1.5, b=0.75 for document length normalization  
+- **Relevance Scoring**: Context-aware ranking with query term highlighting  
 
-# View logs
-docker-compose logs -f search-api
+### ? High Performance 
+- **Sub-10ms Latency**: p95 latency under 10ms with caching  
+- **1000+ QPS**: Handles over 1000 queries per second  
+- **12x Speedup**: Intelligent Redis caching provides 12x performance improvement  
+- **Async Architecture**: Non-blocking I/O for maximum throughput  
 
-# Stop services
-docker-compose down
-```
+### ??? Production Ready 
+- **Structured Logging**: JSON logs for easy parsing and monitoring  
+- **Error Handling**: Comprehensive error handling with graceful degradation  
+- **Type Safety**: Full type hints with Pydantic validation  
+- **Testing**: Extensive test coverage with pytest  
+- **Docker Support**: One-command deployment with docker-compose  
 
-### Local Development
+### ?? Developer Experience 
+- **RESTful API**: Clean, intuitive endpoints with FastAPI  
+- **Interactive Docs**: Auto-generated Swagger UI at `/docs`  
+- **Easy Setup**: Quick start with minimal configuration  
+- **Extensible**: Modular architecture for easy feature additions  
 
-```bash
-# Install dependencies
-pip install -r requirements.txt
+--- 
 
-# Start Redis
-redis-server
+## ?? Quick Start 
 
-# Run API
-uvicorn src.api.routes:app --reload
+### Option 1: Docker (Recommended) 
 
-# Run tests
-pytest --cov
-```
+git clone https://github.com/bannushaxddd/NEXORA.git 
+cd NEXORA 
+docker-compose up -d 
+docker-compose logs -f nexora-api 
 
-## 📚 API Documentation
+API runs at http://localhost:8000 
 
-### Search Endpoint
+### Option 2: Local Development 
 
-```bash
-GET /search?q=python&top_k=10
-```
+git clone https://github.com/bannushaxddd/NEXORA.git 
+cd NEXORA 
+python -m venv venv 
+venv\Scripts\activate  # Windows 
+pip install -r requirements.txt 
+redis-server 
+uvicorn src.api.routes:app --reload --host 0.0.0.0 --port 8000 
 
-Response:
+--- 
 
-```json
-{
-  "query": "python programming",
-  "results": [
-    {
-      "doc_id": "1",
-      "content": "Python is a programming language...",
-      "score": 2.1543,
-      "rank": 1,
-      "highlights": ["python programming language"]
-    }
-  ],
-  "total_results": 5,
-  "search_time_ms": 8.2,
-  "cached": true
-}
-```
+## ?? License 
+MIT License - see [LICENSE](LICENSE) 
 
-### Health Check
+## ?? Author 
 
-```bash
-GET /
-```
-
-Response:
-
-```json
-{
-  "status": "healthy",
-  "version": "2.0.0",
-  "timestamp": 1234567890
-}
-```
-
-### Cache Management
-
-```bash
-POST /cache/invalidate?pattern=search:*
-```
-
-Response:
-
-```json
-{
-  "invalidated": 42,
-  "pattern": "search:*"
-}
-```
-
-## 🧪 Testing
-
-```bash
-# Run all tests
-pytest
-
-# With coverage
-pytest --cov=src --cov-report=html
-
-# Watch mode
-ptw -- --cov=src
-```
-
-## 📈 Benchmarking
-
-```bash
-# Run benchmarks
-python scripts/benchmark.py
-```
-
-Example output:
-
-```text
-📊 Benchmarking WITHOUT cache...
-  Average: 52.34ms
-  P95: 78.12ms
-
-📊 Benchmarking WITH cache...
-  Average: 4.21ms
-  P95: 8.45ms
-
-🚀 Speedup: 12.4x faster with cache
-```
-
-## 🎯 Key Implementation Details
-
-### BM25 Ranking
-
-- Better than TF-IDF for information retrieval
-- Tuned parameters: k1=1.5, b=0.75
-- Handles document length normalization
-
-### Caching Strategy
-
-- Two-level caching: In-memory + Redis
-- TTL: 1 hour (configurable)
-- Cache key: Hash of (query + top_k)
-
-### Async Architecture
-
-- Non-blocking I/O with asyncio
-- Connection pooling for Redis
-- Concurrent request handling
-
-## 🔧 Configuration
-
-Environment variables (see `.env`):
-
-- `REDIS_HOST`: Redis server host
-- `REDIS_PORT`: Redis server port
-- `CACHE_TTL`: Cache time-to-live (seconds)
-- `MAX_RESULTS`: Maximum search results
-- `CORS_ORIGINS`: Allowed CORS origins
-
-## 📝 Development
-
-```bash
-# Format code
-make format
-
-# Lint
-make lint
-
-# Run all checks
-make pre-commit
-```
-
-## 🐛 Known Issues & Future Work
-
-- [ ] Add Elasticsearch integration
-- [ ] Implement autocomplete with Trie
-- [ ] Add neural search with embeddings
-- [ ] Implement query understanding (spell check)
-- [ ] Add A/B testing framework
-- [ ] Deploy to Kubernetes
-
-## 📄 License
-
-MIT License
-
-## 👤 Author
-
-Your Name - [GitHub](https://github.com/yourusername)
-
-## 🙏 Acknowledgments
-
-Built as a learning project to demonstrate FAANG-level engineering practices.
-
+**Your Name** 
+GitHub: [@bannushaxddd](https://github.com/bannushaxddd) 
+Email: your.email@example.com 
+
+**Built with ?? by Your Name** 
