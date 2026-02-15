@@ -88,6 +88,6 @@ MIT License - see LICENSE
 ## Author 
 Bannusha Shaik 
 GitHub: @bannushaxddd 
-Email: your.email@example.com 
+Email: bannushashaik85@gmail.com 
 
 Built by Bannusha Shaik 
