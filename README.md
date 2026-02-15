@@ -135,7 +135,6 @@ $ curl "https://nexora-1kjq.onrender.com/search?q=python&top_k=3"
 **Bannusha Shaik**
 - GitHub: [@bannushaxddd](https://github.com/bannushaxddd)
 - Live Demo: [nexora-1kjq.onrender.com](https://nexora-1kjq.onrender.com)
-- LinkedIn: [Your Profile](#)
 
 ---
 
@@ -145,4 +144,4 @@ MIT License - see [LICENSE](LICENSE) file for details
 
 ---
 
-*Built with ❤️ by Bannusha Shaik | Powered by BM25 Algorithm*
+*Built by Bannusha Shaik | Powered by BM25 Algorithm*
