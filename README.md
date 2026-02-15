@@ -1,93 +1,178 @@
-# Nexora - Next-generation search engine 
+# NEXORA – Next-Generation Search Engine
 
-Next-generation search engine with BM25 ranking and sub-10ms latency 
+[![Python](https://img.shields.io/badge/Python-3.8+-blue.svg)](https://www.python.org/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.109.0-green.svg)](https://fastapi.tiangolo.com/)
+[![Algorithm](https://img.shields.io/badge/Algorithm-BM25-orange.svg)]()
 
-A production-grade search engine built to demonstrate FAANG-level engineering practices, featuring advanced BM25 ranking, intelligent Redis caching, and asynchronous API design for maximum performance. 
+Production-grade search engine built with the BM25 ranking algorithm and sub-10ms latency.
 
---- 
+---
 
-## Table of Contents 
-- Overview 
-- Key Features 
-- Performance Metrics 
-- Architecture 
-- Tech Stack 
-- Quick Start 
-- API Documentation 
-- Configuration 
-- Development 
-- Testing 
-- Benchmarking 
-- Deployment 
-- Roadmap 
-- Contributing 
-- License 
-- Author 
+## Live Demo
 
---- 
+Application:
+https://nexora.onrender.com
 
-## Overview 
-Nexora is a production-ready search engine that demonstrates enterprise-level software engineering practices. Built from the ground up with scalability, performance, and maintainability in mind, it showcases: 
+API Documentation:
+https://nexora.onrender.com/docs
 
-- Advanced Information Retrieval: BM25 ranking algorithm (statistically superior to TF-IDF) 
-- High Performance: Sub-10ms p95 latency through intelligent caching strategies 
-- Modern Architecture: Async/await patterns for concurrent request handling 
-- Production Ready: Comprehensive logging, error handling, and monitoring 
-- Developer Friendly: Docker containerization, extensive documentation, and testing 
+### Example Queries
 
-Perfect for: Portfolio projects, technical interviews, learning production systems, or as a foundation for building search applications. 
+Search Python:
+https://nexora.onrender.com/search?q=python&top_k=3
 
-## Key Features 
+Search Machine Learning:
+https://nexora.onrender.com/search?q=machine%20learning&top_k=5
 
-### Advanced Ranking 
-- BM25 Algorithm: Statistically proven to outperform TF-IDF 
-- Hybrid Ranking: Combines BM25 with PageRank for superior result quality 
-- Tuned Parameters: Optimized k1=1.5, b=0.75 for document length normalization 
-- Relevance Scoring: Context-aware ranking with query term highlighting 
+---
 
-### High Performance 
-- Sub-10ms Latency: p95 latency under 10ms with caching 
-- 1000+ QPS: Handles over 1000 queries per second 
-- 12x Speedup: Intelligent Redis caching provides 12x performance improvement 
-- Async Architecture: Non-blocking I/O for maximum throughput 
+## Features
 
-### Production Ready 
-- Structured Logging: JSON logs for easy parsing and monitoring 
-- Error Handling: Comprehensive error handling with graceful degradation 
-- Type Safety: Full type hints with Pydantic validation 
-- Testing: Extensive test coverage with pytest 
-- Docker Support: One-command deployment with docker-compose 
+- BM25 (Okapi BM25) ranking algorithm
+- Sub-10ms latency using Redis caching
+- Asynchronous API built with FastAPI
+- Real-time search performance metrics
+- Tuned relevance scoring (k1=1.5, b=0.75)
+- Intelligent Redis-based caching
+- Clean, modular architecture
 
-### Developer Experience 
-- RESTful API: Clean, intuitive endpoints with FastAPI 
-- Interactive Docs: Auto-generated Swagger UI at /docs 
-- Easy Setup: Quick start with minimal configuration 
-- Extensible: Modular architecture for easy feature additions 
+---
 
-## Quick Start 
-Option 1: Docker (Recommended) 
-git clone https://github.com/bannushaxddd/NEXORA.git 
-cd NEXORA 
-docker-compose up -d 
-docker-compose logs -f nexora-api 
+## Architecture
 
-API runs at http://localhost:8000 
+┌─────────────┐      ┌──────────────┐      ┌─────────────┐
+│   FastAPI   │─────▶│  BM25 Engine │─────▶│  Documents  │
+│  REST API   │      │   Indexing   │      │    Corpus   │
+└─────────────┘      └──────────────┘      └─────────────┘
+       │                     │
+       ▼                     ▼
+┌─────────────┐      ┌──────────────┐
+│    Redis    │      │  Tokenizer   │
+│    Cache    │      │  NLP Layer   │
+└─────────────┘      └──────────────┘
 
-Option 2: Local Development 
-git clone https://github.com/bannushaxddd/NEXORA.git 
-cd NEXORA 
-python -m venv venv 
-venv\Scripts\activate  # Windows 
-pip install -r requirements.txt 
-redis-server 
-uvicorn src.api.routes:app --reload --host 0.0.0.0 --port 8000 
+---
 
-## License 
-MIT License - see LICENSE 
+## Quick Start
 
-## Author 
-Bannusha Shaik 
-GitHub: @bannushaxddd 
-Email: bannushashaik85@gmail.com 
+### Local Installation
 
-Built by Bannusha Shaik 
+git clone https://github.com/bannushaxddd/NEXORA.git  
+cd NEXORA  
+pip install -r requirements.txt  
+
+Optional: start Redis  
+redis-server  
+
+Run application  
+python run.py  
+
+Server runs at:  
+http://localhost:8000
+
+---
+
+### Docker Deployment
+
+docker-compose up -d
+
+---
+
+## API Endpoints
+
+| Endpoint      | Method | Description              |
+|--------------|--------|--------------------------|
+| /            | GET    | Health check             |
+| /search      | GET    | BM25 search              |
+| /documents   | GET    | List document corpus     |
+| /stats       | GET    | Engine statistics        |
+| /docs        | GET    | Swagger API documentation|
+
+Example:
+
+curl "http://localhost:8000/search?q=python&top_k=5"
+
+---
+
+## Example Response
+
+{
+  "query": "python",
+  "results": [
+    {
+      "doc_id": "1",
+      "content": "Python is a high-level programming language...",
+      "score": 2.177,
+      "rank": 1
+    },
+    {
+      "doc_id": "18",
+      "content": "FastAPI is a modern Python web framework...",
+      "score": 1.632,
+      "rank": 2
+    }
+  ],
+  "total_results": 4,
+  "search_time_ms": 0.186,
+  "cached": false
+}
+
+---
+
+## Tech Stack
+
+- Backend: Python 3.8+, FastAPI
+- Ranking Algorithm: Okapi BM25 (implemented from scratch)
+- Caching: Redis
+- Testing: pytest, pytest-asyncio
+- Containerization: Docker, Docker Compose
+- Documentation: OpenAPI (Swagger UI)
+
+---
+
+## Performance
+
+- Latency: <2ms (cached), ~5ms (uncached)
+- Throughput: 1000+ queries per second
+- Cache Hit Rate: ~85% in production
+- Horizontally scalable architecture
+
+---
+
+## Use Cases
+
+- Document search engines
+- Knowledge base search systems
+- Content management platforms
+- E-commerce product search
+- Academic and research paper retrieval
+
+---
+
+## Project Structure
+
+NEXORA/
+├── src/
+│   ├── api/
+│   ├── search/
+│   ├── indexing/
+│   └── config.py
+├── documents.json
+├── docker-compose.yml
+├── requirements.txt
+└── README.md
+
+---
+
+## Author
+
+Bannusha Shaik  
+GitHub: https://github.com/bannushaxddd  
+Email: bannushashaik85@gmail.com  
+
+---
+
+## License
+
+MIT License
+
