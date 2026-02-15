@@ -1,14 +1,24 @@
 """Benchmark script to measure search performance"""
-import time
 import asyncio
 import statistics
-from src.search.engine import SearchEngine
-from src.search.cache import cache
+import time
+import os
+import sys
+
+# Allow running as: python scripts/benchmark.py (project root added to path)
+_bench_dir = os.path.dirname(os.path.abspath(__file__))
+_project_root = os.path.dirname(_bench_dir)
+if _project_root not in sys.path:
+    sys.path.insert(0, _project_root)
+os.chdir(_project_root)
+
 from src.indexing.crawler import load_documents
+from src.search.cache import cache
+from src.search.engine import SearchEngine
 
 async def benchmark():
     # Initialize
-    print("🚀 Initializing search engine...")
+    print("Initializing search engine...")
     await cache.connect()
     documents = load_documents()
     engine = SearchEngine(documents)
@@ -23,7 +33,7 @@ async def benchmark():
     ]
     
     # Benchmark without cache
-    print("\n📊 Benchmarking WITHOUT cache...")
+    print("\nBenchmarking WITHOUT cache...")
     latencies_no_cache = []
     for query in queries * 10:  # 50 total queries
         start = time.time()
@@ -37,7 +47,7 @@ async def benchmark():
     print(f"  P99: {sorted(latencies_no_cache)[int(len(latencies_no_cache)*0.99)]:.2f}ms")
     
     # Benchmark with cache
-    print("\n📊 Benchmarking WITH cache...")
+    print("\nBenchmarking WITH cache...")
     latencies_with_cache = []
     for query in queries * 10:  # 50 total queries
         start = time.time()
@@ -52,7 +62,7 @@ async def benchmark():
     
     # Calculate speedup
     speedup = statistics.mean(latencies_no_cache) / statistics.mean(latencies_with_cache)
-    print(f"\n🚀 Speedup: {speedup:.2f}x faster with cache")
+    print(f"\nSpeedup: {speedup:.2f}x faster with cache")
     
     await cache.disconnect()
 

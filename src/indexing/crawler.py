@@ -2,7 +2,12 @@
 import json
 import os
 from typing import Dict
+
 import requests
+from bs4 import BeautifulSoup
+
+from src.config import settings
+from src.logger import logger
 
 
 def _sample_documents() -> Dict[str, str]:
@@ -12,9 +17,6 @@ def _sample_documents() -> Dict[str, str]:
         "2": "Machine learning is a branch of artificial intelligence.",
         "3": "Data science uses statistics and programming to analyze data.",
     }
-from bs4 import BeautifulSoup
-from src.logger import logger
-from src.config import settings
 
 def crawl_web(urls: list, max_pages: int = 10, max_chars: int = 5000) -> Dict[str, str]:
     """

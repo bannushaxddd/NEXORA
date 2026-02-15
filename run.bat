@@ -1,3 +1,3 @@
 @echo off
 cd /d "%~dp0"
-uvicorn src.api.routes:app --reload --host 0.0.0.0 --port 8000
+python run_server.py

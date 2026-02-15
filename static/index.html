@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEXORA Search Engine</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            font-size: 3.5em;
+            font-weight: 700;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .search-box {
+            background: white;
+            border-radius: 50px;
+            padding: 10px 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            display: flex;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .search-box input {
+            border: none;
+            outline: none;
+            flex: 1;
+            font-size: 1.1em;
+            padding: 10px;
+        }
+
+        .search-box button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 30px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .search-box button:hover {
+            transform: scale(1.05);
+        }
+
+        .options {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            align-items: center;
+        }
+
+        .option-group {
+            background: white;
+            padding: 10px 20px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .option-group label {
+            font-weight: 500;
+            color: #333;
+        }
+
+        .option-group select {
+            border: 1px solid #ddd;
+            padding: 5px 10px;
+            border-radius: 10px;
+            font-size: 0.9em;
+        }
+
+        .results {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        }
+
+        .result-item {
+            border-left: 4px solid #667eea;
+            padding: 15px;
+            margin-bottom: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            transition: transform 0.2s;
+        }
+
+        .result-item:hover {
+            transform: translateX(5px);
+        }
+
+        .result-rank {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            font-weight: bold;
+            padding: 5px 12px;
+            border-radius: 20px;
+            margin-right: 10px;
+            font-size: 0.9em;
+        }
+
+        .result-score {
+            display: inline-block;
+            background: #28a745;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            margin-left: 10px;
+            font-size: 0.85em;
+        }
+
+        .result-content {
+            margin-top: 10px;
+            color: #555;
+            line-height: 1.6;
+        }
+
+        .stats {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .stat-label {
+            font-size: 0.9em;
+            color: #666;
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 40px;
+            color: #999;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #667eea;
+            font-size: 1.2em;
+        }
+
+        .example-queries {
+            color: white;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .example-queries span {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            padding: 5px 15px;
+            border-radius: 20px;
+            margin: 5px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .example-queries span:hover {
+            background: rgba(255,255,255,0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>NEXORA</h1>
+            <p>Next-generation search engine with BM25 ranking</p>
+        </div>
+
+        <div class="search-box">
+            <input 
+                type="text" 
+                id="searchInput" 
+                placeholder="Search for anything..." 
+                value="python"
+            />
+            <button onclick="performSearch()">Search</button>
+        </div>
+
+        <div class="options">
+            <div class="option-group">
+                <label for="topK">Top Results:</label>
+                <select id="topK">
+                    <option value="3">3</option>
+                    <option value="5">5</option>
+                    <option value="10" selected>10</option>
+                    <option value="20">20</option>
+                </select>
+            </div>
+        </div>
+
+        <div id="results" class="results">
+            <div class="no-results">
+                Enter a search query and click Search
+            </div>
+        </div>
+
+        <div class="example-queries">
+            <strong>Try:</strong>
+            <span onclick="setQuery('python')">python</span>
+            <span onclick="setQuery('machine learning')">machine learning</span>
+            <span onclick="setQuery('web development')">web development</span>
+            <span onclick="setQuery('cloud')">cloud</span>
+            <span onclick="setQuery('artificial intelligence')">artificial intelligence</span>
+        </div>
+    </div>
+
+    <script>
+        // Use same origin so it works when served from the API
+        const API_BASE = window.location.origin;
+
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                performSearch();
+            }
+        });
+
+        function setQuery(query) {
+            document.getElementById('searchInput').value = query;
+            performSearch();
+        }
+
+        async function performSearch() {
+            const query = document.getElementById('searchInput').value.trim();
+            const topK = document.getElementById('topK').value;
+            const resultsDiv = document.getElementById('results');
+
+            if (!query) {
+                resultsDiv.innerHTML = '<div class="no-results">Please enter a search query</div>';
+                return;
+            }
+
+            resultsDiv.innerHTML = '<div class="loading">Searching...</div>';
+
+            try {
+                const response = await fetch(`${API_BASE}/search?q=${encodeURIComponent(query)}&top_k=${topK}`);
+                if (!response.ok) throw new Error(response.statusText);
+                const data = await response.json();
+                displayResults(data);
+            } catch (error) {
+                resultsDiv.innerHTML = `<div class="no-results">Error: ${error.message}<br>Make sure the server is running at ${API_BASE}</div>`;
+            }
+        }
+
+        function displayResults(data) {
+            const resultsDiv = document.getElementById('results');
+
+            if (!data.results || data.results.length === 0) {
+                resultsDiv.innerHTML = '<div class="no-results">No results found</div>';
+                return;
+            }
+
+            let html = `
+                <div class="stats">
+                    <div class="stat-item">
+                        <div class="stat-value">${data.total_results}</div>
+                        <div class="stat-label">Results Found</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">${(data.search_time_ms || 0).toFixed(2)}ms</div>
+                        <div class="stat-label">Search Time</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">${data.cached ? 'Yes' : 'No'}</div>
+                        <div class="stat-label">Cached</div>
+                    </div>
+                </div>
+                <h3 style="margin-bottom: 15px;">Search Results for: <em>${data.query || ''}</em></h3>
+            `;
+
+            data.results.forEach(result => {
+                const content = (result.content || '').substring(0, 500);
+                const score = result.score != null ? result.score.toFixed(4) : '—';
+                html += `
+                    <div class="result-item">
+                        <div>
+                            <span class="result-rank">#${result.rank}</span>
+                            <strong>Document ${result.doc_id}</strong>
+                            <span class="result-score">Score: ${score}</span>
+                        </div>
+                        <div class="result-content">${escapeHtml(content)}</div>
+                    </div>
+                `;
+            });
+
+            resultsDiv.innerHTML = html;
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        window.addEventListener('load', () => {
+            performSearch();
+        });
+    </script>
+</body>
+</html>

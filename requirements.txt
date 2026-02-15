@@ -20,7 +20,6 @@ structlog==24.1.0
 
 # Async
 httpx==0.26.0
-aioredis==2.0.1
 
 # Testing
 pytest==8.0.0
