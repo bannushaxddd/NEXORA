@@ -1,4 +1,4 @@
-# NEXORA – Next-Generation Search Engine
+# NEXORA – Next Search Engine
 
 [![Python](https://img.shields.io/badge/Python-3.8+-blue.svg)](https://www.python.org/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.109.0-green.svg)](https://fastapi.tiangolo.com/)
@@ -11,10 +11,10 @@ Production-grade search engine built with the BM25 ranking algorithm and sub-10m
 ## Live Demo
 
 Application:
-https://nexora.onrender.com
+https://nexora-1kjq.onrender.com
 
 API Documentation:
-https://nexora.onrender.com/docs
+https://nexora-1kjq.onrender.com/docs
 
 ### Example Queries
 
