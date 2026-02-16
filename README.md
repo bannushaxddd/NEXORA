@@ -4,7 +4,7 @@ NEXORA - Next-Generation Search Engine
 Python FastAPI Live Demo
 
 🌐 Live Demo
-🚀 Try it now: (https://nexora-1kjq.onrender.com/)
+🚀 Try it now: (https://mynexora.onrender.com/)
 
 🔍 Example Searches:
 
