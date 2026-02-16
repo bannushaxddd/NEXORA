@@ -8,6 +8,7 @@ from bs4 import BeautifulSoup
 
 from src.config import settings
 from src.logger import logger
+from src.indexing.public_datasets import collect_public_datasets
 
 
 def _sample_documents() -> Dict[str, str]:
@@ -68,7 +69,7 @@ def crawl_web(urls: list, max_pages: int = 10, max_chars: int = 5000) -> Dict[st
 
 def load_documents() -> Dict[str, str]:
     """
-    Load documents from cache or crawl web
+    Load documents from cache or collect from public datasets
     
     Returns:
         Dictionary of {doc_id: text}
@@ -80,30 +81,19 @@ def load_documents() -> Dict[str, str]:
         with open(cache_file, "r", encoding="utf-8") as f:
             documents = json.load(f)
         if not documents:
-            logger.warning("cached_documents_empty_using_sample")
-            documents = _sample_documents()
+            logger.warning("cached_documents_empty_collecting_public_datasets")
+            documents = collect_public_datasets()
         else:
             logger.info("loaded_cached_documents", count=len(documents))
         return documents
     
-    # Crawl web
-    urls = [
-        "https://en.wikipedia.org/wiki/Machine_learning",
-        "https://en.wikipedia.org/wiki/Python_(programming_language)",
-        "https://en.wikipedia.org/wiki/Data_science",
-        "https://en.wikipedia.org/wiki/Artificial_intelligence",
-        "https://en.wikipedia.org/wiki/Natural_language_processing",
-    ]
-    
-    documents = crawl_web(
-        urls,
-        max_pages=settings.max_crawl_pages,
-        max_chars=settings.max_page_size,
-    )
+    # Collect from public datasets (Option B)
+    logger.info("collecting_from_public_datasets")
+    documents = collect_public_datasets()
 
-    # If crawl returned nothing, use minimal sample so app still runs
+    # If collection returned nothing, use minimal sample so app still runs
     if not documents:
-        logger.warning("crawl_empty_using_sample_documents")
+        logger.warning("public_datasets_empty_using_sample_documents")
         documents = _sample_documents()
 
     # Cache documents
